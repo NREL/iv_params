@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="iv_params",
-    version="0.0.4",
+    version="0.0.5",
     author="Michael Deceglie",
     author_email="michael.deceglie@nrel.gov",
     description="Perform ASTM E1036 extraction of photovoltaic IV parameters",
