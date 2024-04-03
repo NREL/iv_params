@@ -27,7 +27,8 @@ class IV_Params():
         self.v = v
         self.i = i
 
-    def calc_iv_params(self, imax_limits=(0.75, 1.15), vmax_limits=(0.75, 1.15), voc_points=3, isc_points=3):
+    def calc_iv_params(self, imax_limits=(0.75, 1.15), vmax_limits=(0.75, 1.15),
+                       voc_points=3, isc_points=3, mp_fit_order=4):
         '''
         Extract IV parameters
 
@@ -40,9 +41,11 @@ class IV_Params():
             Two-element tuple (low, high) specifying the fraction of estimated Vmp within which
             to fit a polynomial for max power calculation
         voc_points : int
-            the number of points near open circuit to use for linear fit and Voc calculation
+            The number of points near open circuit to use for linear fit and Voc calculation
         isc_points : int
-            the number of points near short circuit to use for linear fit and Isc calculation
+            The number of points near short circuit to use for linear fit and Isc calculation
+        mp_fit_order : int
+            The order of the polynomial fit of power vs. voltage near maximum power
 
         Returns
         -------
@@ -55,7 +58,7 @@ class IV_Params():
         voc = np.nan
         isc = np.nan
 
-        # determine if we can use voc and isc estimates 
+        # determine if we can use voc and isc estimates
         i_min_ind = df['i'].abs().idxmin()
         v_min_ind = df['v'].abs().idxmin()
         voc_est = df['v'][i_min_ind]
@@ -94,7 +97,7 @@ class IV_Params():
         filtered = df[mask]
 
         # fit polynomial and find max
-        mp_fit = Poly.fit(filtered['v'], filtered['p'], 4)
+        mp_fit = Poly.fit(filtered['v'], filtered['p'], mp_fit_order)
         roots = mp_fit.deriv().roots()
         # only coniser real roots
         roots = roots.real[abs(roots.imag) < 1e-5]
